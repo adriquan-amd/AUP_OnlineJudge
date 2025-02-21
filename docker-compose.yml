@@ -1,0 +1,84 @@
+version: "3"
+services:
+
+  oj-redis:
+    image: redis:4.0-alpine
+    restart: always
+    volumes:
+      - ./data/redis:/data
+
+  oj-postgres:
+    image: postgres:10-alpine
+    restart: always
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=onlinejudge
+      - POSTGRES_USER=onlinejudge
+      - POSTGRES_PASSWORD=onlinejudge
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U onlinejudge"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  oj-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      oj-postgres:
+        condition: service_healthy
+      oj-redis:
+        condition: service_started
+    volumes:
+      - ./data/backend:/data
+    environment:
+      - POSTGRES_DB=onlinejudge
+      - POSTGRES_USER=onlinejudge
+      - POSTGRES_PASSWORD=onlinejudge
+      - JUDGE_SERVER_TOKEN=aup123
+    ports:
+      - "0.0.0.0:80:8000"
+      - "0.0.0.0:443:1443"
+
+  oj-judge:
+    build:
+      context: ./judgeServer
+      dockerfile: Dockerfile
+    read_only: false
+    security_opt:
+      - seccomp=unconfined
+    cap_drop:
+      - SETPCAP
+      - SYS_CHROOT
+      - SETFCAP
+    devices:
+      - /dev/kfd
+      - /dev/dri
+    group_add:
+      - "render"
+      - "video"
+    privileged: true
+    tmpfs:
+      - /tmp
+
+    volumes:
+      - ./data/backend/test_case:/test_case:ro
+      - ./data/judge_server/log:/log
+      - ./data/judge_server/run:/judger
+    environment:
+      - SERVICE_URL=http://oj-judge:8080
+      - BACKEND_URL=http://oj-backend:8000/api/judge_server_heartbeat/
+      - HSA_OVERRIDE_GFX_VERSION=11.0.3
+      - TOKEN=aup123
+    depends_on:
+      oj-backend:
+        condition: service_started
+    ports:
+      - "0.0.0.0:12358:8080"
+
+networks:
+  default:
+    driver: bridge

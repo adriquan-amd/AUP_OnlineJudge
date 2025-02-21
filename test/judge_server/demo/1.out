@@ -1,0 +1,5 @@
+GPU: d_a = 100, d_b = 100
+Memcpy error: no error
+Kernel launch error: invalid device function (hipErrorInvalidDeviceFunction)
+GPU: d_c = 0
+0

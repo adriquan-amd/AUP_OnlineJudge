@@ -1,0 +1,1109 @@
+{
+	"info": {
+		"_postman_id": "ac45b9ad-d3b9-4b5e-833e-43f66538199b",
+		"name": "Mock Data Generation",
+		"description": "# About this collection\n\nPostman provides dynamic variables that use the [Faker library](https://www.npmjs.com/package/@faker-js/faker) to generate sample data, including random names, addresses, and email addresses.\n\nThis collection demonstrates the use of dynamic variables to create randomized mock data. The examples in this collection utilize various data types and showcase how dynamic variables can help simulate real-world data within your API testing environment.\n\n## Using this collection\n\n**Step 1: Send requests**\n\nSelect a request from the collection, review the request parameters and pre-request scripts, then hit \"Send\" to execute the request.\n\n**Step 2: Review the \"Body\" and \"Pre-request Script\"** **tabs**\n\nUnderstand how dynamic variables are used to generate mock data. Dynamic variables can be used in the request URL and Body, or even as part of a Pre-Request or Test script for more complex use cases (see \"Create mock blog post\" request).\n\n**Step 3: Customize (optional)**\n\nCustomize dynamic variables to better suit your specific use case. Save the changes, and execute the requests.\n\n**Step 4: Analyze responses**\n\nExamine the response body to see the generated mock data. Note that the responses will be different each time you send the request, as the dynamic variables ensure randomized data generation.\n\nEnjoy testing with diverse and dynamic data!\n\n## Resources\n\n[Dynamic variables](https://learning.postman.com/docs/writing-scripts/script-references/variables-list/)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29092836",
+		"_collection_link": "https://interstellar-satellite-615454.postman.co/workspace/AUP_OnlineJudge~2ec03b58-a29d-4328-bd0c-7381558c72a2/collection/29092836-ac45b9ad-d3b9-4b5e-833e-43f66538199b?action=share&source=collection_link&creator=29092836"
+	},
+	"item": [
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.sendRequest({\r",
+							"    url: pm.collectionVariables.get(\"baseUrl\") + \"/profile\",\r",
+							"    method: \"GET\",\r",
+							"    headers: {\r",
+							"        \"X-CSRFToken\": \"Fetch\"  \r",
+							"    }\r",
+							"}, function (err, res) {\r",
+							"    if (err) {\r",
+							"        console.log(\"Error fetching CSRF Token:\", err);\r",
+							"    } else {\r",
+							"        // 获取 Set-Cookie 头\r",
+							"        var cookieHeaders = res.headers.all(\"Set-Cookie\");\r",
+							"        \r",
+							"        if (cookieHeaders.length > 0) {\r",
+							"            let csrfToken = null;\r",
+							"\r",
+							"            // 遍历所有 Set-Cookie 头，查找 csrftoken\r",
+							"            cookieHeaders.forEach(function(cookie) {\r",
+							"                let match = cookie.value.match(/csrftoken=([^;]*)/);\r",
+							"                if (match) {\r",
+							"                    csrfToken = match[1];  // 提取 `csrftoken`\r",
+							"                }\r",
+							"            });\r",
+							"\r",
+							"            if (csrfToken) {\r",
+							"                pm.environment.set(\"XCSRFToken\", csrfToken); // 存储到环境变量\r",
+							"                console.log(\"CSRF Token stored:\", csrfToken);\r",
+							"            } else {\r",
+							"                console.log(\"CSRF Token not found in Set-Cookie headers.\");\r",
+							"            }\r",
+							"        } else {\r",
+							"            console.log(\"No Set-Cookie headers found.\");\r",
+							"        }\r",
+							"    }\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-csrfToken",
+						"value": "{{XCSRFToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"root\",\r\n    \"password\":\"rootroot\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "login",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-csrfToken",
+								"value": "{{XCSRFToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"root\",\r\n    \"password\":\"rootroot\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 13 Feb 2025 02:08:17 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json;charset=UTF-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "46"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "Referrer-Policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "DENY"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "Vary",
+							"value": "Cookie"
+						},
+						{
+							"key": "Set-Cookie",
+							"value": "csrftoken=Ay4Hd2cIjnfD38v1BC3XVDHPcb6NhXAqNASi1PH9TVMelpew1wycTwW7f7uPhnBZ; expires=Thu, 12 Feb 2026 02:08:17 GMT; Max-Age=31449600; Path=/; SameSite=Lax"
+						},
+						{
+							"key": "Set-Cookie",
+							"value": "sessionid=c03we7knc0q0ojxmg57gwitsc81az6i5; expires=Thu, 27 Feb 2025 02:08:17 GMT; HttpOnly; Max-Age=1209600; Path=/; SameSite=Lax"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1; mode=block"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"error\": null,\n    \"data\": \"Succeeded\"\n}"
+				}
+			]
+		},
+		{
+			"name": "UploadTestCase",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.sendRequest({\r",
+							"    url: pm.collectionVariables.get(\"baseUrl\") + \"/profile\",\r",
+							"    method: \"GET\",\r",
+							"    headers: {\r",
+							"        \"X-CSRFToken\": \"Fetch\"  \r",
+							"    }\r",
+							"}, function (err, res) {\r",
+							"    if (err) {\r",
+							"        console.log(\"Error fetching CSRF Token:\", err);\r",
+							"    } else {\r",
+							"        // 获取 Set-Cookie 头\r",
+							"        var cookieHeaders = res.headers.all(\"Set-Cookie\");\r",
+							"        \r",
+							"        if (cookieHeaders.length > 0) {\r",
+							"            let csrfToken = null;\r",
+							"\r",
+							"            // 遍历所有 Set-Cookie 头，查找 csrftoken\r",
+							"            cookieHeaders.forEach(function(cookie) {\r",
+							"                let match = cookie.value.match(/csrftoken=([^;]*)/);\r",
+							"                if (match) {\r",
+							"                    csrfToken = match[1];  // 提取 `csrftoken`\r",
+							"                }\r",
+							"            });\r",
+							"\r",
+							"            if (csrfToken) {\r",
+							"                pm.environment.set(\"XCSRFToken\", csrfToken); // 存储到环境变量\r",
+							"                console.log(\"CSRF Token stored:\", csrfToken);\r",
+							"            } else {\r",
+							"                console.log(\"CSRF Token not found in Set-Cookie headers.\");\r",
+							"            }\r",
+							"        } else {\r",
+							"            console.log(\"No Set-Cookie headers found.\");\r",
+							"        }\r",
+							"    }\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"var responseJson = pm.response.json();\r",
+							"\r",
+							"\r",
+							"if (responseJson.error === null) {\r",
+							"    var extractedId = responseJson.data.id;\r",
+							"    var infoArray = responseJson.data.info;\r",
+							"    \r",
+							"\r",
+							"    pm.collectionVariables.set(\"test_case_id\", extractedId);\r",
+							"    infoArray.forEach((item, index) => {\r",
+							"        item.score = 100;  // 你可以修改这个分数\r",
+							"    });\r",
+							"    pm.collectionVariables.set(\"infoArray\", JSON.stringify(infoArray));\r",
+							"\r",
+							"    \r",
+							"    // 在 Console 里打印出来（调试用）\r",
+							"    console.log(\"Extracted ID:\", md5);\r",
+							"} else {\r",
+							"    console.log(\"Error in response:\", responseJson.error);\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "spj",
+							"value": "false",
+							"type": "text"
+						},
+						{
+							"key": "file",
+							"type": "file",
+							"src": "resource/testcase.zip"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/admin/test_case",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"admin",
+						"test_case"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "UploadTestCase",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "spj",
+									"value": "false",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "resource/testcase.zip"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/test_case",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"test_case"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 13 Feb 2025 04:11:59 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json;charset=UTF-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "389"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "Referrer-Policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "DENY"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "Vary",
+							"value": "Cookie"
+						},
+						{
+							"key": "Set-Cookie",
+							"value": "sessionid=c03we7knc0q0ojxmg57gwitsc81az6i5; expires=Thu, 27 Feb 2025 04:11:59 GMT; HttpOnly; Max-Age=1209600; Path=/; SameSite=Lax"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1; mode=block"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"error\": null,\n    \"data\": {\n        \"id\": \"73f18692fd63fbed8f02758d2313b1e2\",\n        \"info\": [\n            {\n                \"stripped_output_md5\": \"6512bd43d9caa6e02c990b0a82652dca\",\n                \"input_size\": 4,\n                \"output_size\": 2,\n                \"input_name\": \"1.in\",\n                \"output_name\": \"1.out\"\n            }\n        ],\n        \"spj\": false\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "AddProblem",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.sendRequest({\r",
+							"    url: pm.collectionVariables.get(\"baseUrl\") + \"/profile\",\r",
+							"    method: \"GET\",\r",
+							"    headers: {\r",
+							"        \"X-CSRFToken\": \"Fetch\"  \r",
+							"    }\r",
+							"}, function (err, res) {\r",
+							"    if (err) {\r",
+							"        console.log(\"Error fetching CSRF Token:\", err);\r",
+							"    } else {\r",
+							"        // 获取 Set-Cookie 头\r",
+							"        var cookieHeaders = res.headers.all(\"Set-Cookie\");\r",
+							"        \r",
+							"        if (cookieHeaders.length > 0) {\r",
+							"            let csrfToken = null;\r",
+							"\r",
+							"            // 遍历所有 Set-Cookie 头，查找 csrftoken\r",
+							"            cookieHeaders.forEach(function(cookie) {\r",
+							"                let match = cookie.value.match(/csrftoken=([^;]*)/);\r",
+							"                if (match) {\r",
+							"                    csrfToken = match[1];  // 提取 `csrftoken`\r",
+							"                }\r",
+							"            });\r",
+							"\r",
+							"            if (csrfToken) {\r",
+							"                pm.environment.set(\"XCSRFToken\", csrfToken); // 存储到环境变量\r",
+							"                console.log(\"CSRF Token stored:\", csrfToken);\r",
+							"            } else {\r",
+							"                console.log(\"CSRF Token not found in Set-Cookie headers.\");\r",
+							"            }\r",
+							"        } else {\r",
+							"            console.log(\"No Set-Cookie headers found.\");\r",
+							"        }\r",
+							"    }\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"var responseJson = pm.response.json();\r",
+							"\r",
+							"\r",
+							"if (responseJson.error === null && responseJson.data && responseJson.data.id) {\r",
+							"    var problemId = responseJson.data.id\r",
+							"    \r",
+							"\r",
+							"    pm.collectionVariables.set(\"problem_id\", problemId);\r",
+							"    \r",
+							"\r",
+							"} else {\r",
+							"    console.log(\"Error: submission_id not found in response.\");\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-CSRFToken",
+						"value": "{{XCSRFToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \r\n    \"_id\": \"16\",\r\n    \"title\": \"Sample Problem\",\r\n    \"description\": \"<p>This is a sample problem.</p>\",\r\n    \"input_description\": \"<p>Given two integers A and B.</p>\",\r\n    \"output_description\": \"<p>Output the sum of A and B.</p>\",\r\n    \"time_limit\": 2000,\r\n    \"memory_limit\": 512,\r\n    \"difficulty\": \"Low\",\r\n    \"visible\": true,\r\n    \"share_submission\": true,\r\n    \"tags\": [\"math\", \"arithmetic\"],\r\n    \"languages\": [\"C\", \"C++\"],\r\n    \"template\": {\r\n    \"C\": \"//PREPEND BEGIN\\n#include <stdio.h>\\n//PREPEND END\\n\\n//TEMPLATE BEGIN\\nint add(int a, int b) {\\n  return a + b;\\n}\\n//TEMPLATE END\\n\\n//APPEND BEGIN\\nint main() {\\n  int a, b;\\n  scanf(\\\"%d %d\\\", &a, &b);\\n  printf(\\\"%d\\\\n\\\", add(a, b));\\n  return 0;\\n}\\n//APPEND END\",\r\n    \r\n    \"C++\": \"//PREPEND BEGIN\\n#include <iostream>\\nusing namespace std;\\n//PREPEND END\\n\\n//TEMPLATE BEGIN\\nint add(int a, int b) {\\n  return a + b;\\n}\\n//TEMPLATE END\\n\\n//APPEND BEGIN\\nint main() {\\n  int a, b;\\n  cin >> a >> b;\\n  cout << add(a, b) << endl;\\n  return 0;\\n}\\n//APPEND END\"\r\n}\r\n,\r\n    \"samples\": [\r\n        {\r\n            \"input\": \"3 5\",\r\n            \"output\": \"8\"\r\n        },\r\n        {\r\n            \"input\": \"10 20\",\r\n            \"output\": \"30\"\r\n        }\r\n    ],\r\n    \"spj\": false,\r\n    \"spj_language\": \"C++\",\r\n    \"spj_code\": \"\",\r\n    \"spj_compile_ok\": false,\r\n    \"test_case_id\": \"{{test_case_id}}\",\r\n    \"test_case_score\": {{infoArray}},\r\n    \"rule_type\": \"ACM\",\r\n    \"hint\": \"Use simple arithmetic operations.\",\r\n    \"source\": \"Sample Problem Set\",\r\n    \"io_mode\": {\r\n        \"io_mode\": \"Standard IO\",\r\n        \"input\": \"input.txt\",\r\n        \"output\": \"output.txt\"\r\n    }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/admin/problem",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"admin",
+						"problem"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-CSRFToken",
+								"value": "{{XCSRFToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \r\n    \"_id\": \"16\",\r\n    \"title\": \"Sample Problem\",\r\n    \"description\": \"<p>This is a sample problem.</p>\",\r\n    \"input_description\": \"<p>Given two integers A and B.</p>\",\r\n    \"output_description\": \"<p>Output the sum of A and B.</p>\",\r\n    \"time_limit\": 2000,\r\n    \"memory_limit\": 512,\r\n    \"difficulty\": \"Low\",\r\n    \"visible\": true,\r\n    \"share_submission\": true,\r\n    \"tags\": [\"math\", \"arithmetic\"],\r\n    \"languages\": [\"C\", \"C++\"],\r\n    \"template\": {\r\n    \"C\": \"//PREPEND BEGIN\\n#include <stdio.h>\\n//PREPEND END\\n\\n//TEMPLATE BEGIN\\nint add(int a, int b) {\\n  return a + b;\\n}\\n//TEMPLATE END\\n\\n//APPEND BEGIN\\nint main() {\\n  int a, b;\\n  scanf(\\\"%d %d\\\", &a, &b);\\n  printf(\\\"%d\\\\n\\\", add(a, b));\\n  return 0;\\n}\\n//APPEND END\",\r\n    \r\n    \"C++\": \"//PREPEND BEGIN\\n#include <iostream>\\nusing namespace std;\\n//PREPEND END\\n\\n//TEMPLATE BEGIN\\nint add(int a, int b) {\\n  return a + b;\\n}\\n//TEMPLATE END\\n\\n//APPEND BEGIN\\nint main() {\\n  int a, b;\\n  cin >> a >> b;\\n  cout << add(a, b) << endl;\\n  return 0;\\n}\\n//APPEND END\"\r\n}\r\n,\r\n    \"samples\": [\r\n        {\r\n            \"input\": \"3 5\",\r\n            \"output\": \"8\"\r\n        },\r\n        {\r\n            \"input\": \"10 20\",\r\n            \"output\": \"30\"\r\n        }\r\n    ],\r\n    \"spj\": false,\r\n    \"spj_language\": \"C++\",\r\n    \"spj_code\": \"\",\r\n    \"spj_compile_ok\": false,\r\n    \"test_case_id\": \"{{test_case_id}}\",\r\n    \"test_case_score\": {{infoArray}},\r\n    \"rule_type\": \"ACM\",\r\n    \"hint\": \"Use simple arithmetic operations.\",\r\n    \"source\": \"Sample Problem Set\",\r\n    \"io_mode\": {\r\n        \"io_mode\": \"Standard IO\",\r\n        \"input\": \"input.txt\",\r\n        \"output\": \"output.txt\"\r\n    }\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/problem",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"problem"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 13 Feb 2025 04:35:09 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json;charset=UTF-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "2444"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "Referrer-Policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "DENY"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "Vary",
+							"value": "Cookie"
+						},
+						{
+							"key": "Set-Cookie",
+							"value": "sessionid=c03we7knc0q0ojxmg57gwitsc81az6i5; expires=Thu, 27 Feb 2025 04:35:09 GMT; HttpOnly; Max-Age=1209600; Path=/; SameSite=Lax"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1; mode=block"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"error\": null,\n    \"data\": {\n        \"id\": 5,\n        \"tags\": [\n            \"math\",\n            \"arithmetic\"\n        ],\n        \"created_by\": {\n            \"id\": 1,\n            \"username\": \"root\",\n            \"real_name\": null\n        },\n        \"_id\": \"16\",\n        \"is_public\": false,\n        \"title\": \"Sample Problem\",\n        \"description\": \"<p>This is a sample problem.</p>\",\n        \"input_description\": \"<p>Given two integers A and B.</p>\",\n        \"output_description\": \"<p>Output the sum of A and B.</p>\",\n        \"samples\": [\n            {\n                \"input\": \"3 5\",\n                \"output\": \"8\"\n            },\n            {\n                \"input\": \"10 20\",\n                \"output\": \"30\"\n            }\n        ],\n        \"test_case_id\": \"73f18692fd63fbed8f02758d2313b1e2\",\n        \"test_case_score\": [\n            {\n                \"input_name\": \"1.in\",\n                \"output_name\": \"1.out\",\n                \"score\": 100\n            }\n        ],\n        \"hint\": \"Use simple arithmetic operations.\",\n        \"languages\": [\n            \"C\",\n            \"C++\"\n        ],\n        \"template\": {\n            \"C\": \"//PREPEND BEGIN\\n#include <stdio.h>\\n//PREPEND END\\n\\n//TEMPLATE BEGIN\\nint add(int a, int b) {\\n  return a + b;\\n}\\n//TEMPLATE END\\n\\n//APPEND BEGIN\\nint main() {\\n  int a, b;\\n  scanf(\\\"%d %d\\\", &a, &b);\\n  printf(\\\"%d\\\\n\\\", add(a, b));\\n  return 0;\\n}\\n//APPEND END\",\n            \"C++\": \"//PREPEND BEGIN\\n#include <iostream>\\nusing namespace std;\\n//PREPEND END\\n\\n//TEMPLATE BEGIN\\nint add(int a, int b) {\\n  return a + b;\\n}\\n//TEMPLATE END\\n\\n//APPEND BEGIN\\nint main() {\\n  int a, b;\\n  cin >> a >> b;\\n  cout << add(a, b) << endl;\\n  return 0;\\n}\\n//APPEND END\"\n        },\n        \"create_time\": \"2025-02-13T04:35:09.093906Z\",\n        \"last_update_time\": null,\n        \"time_limit\": 2000,\n        \"memory_limit\": 512,\n        \"io_mode\": {\n            \"io_mode\": \"Standard IO\",\n            \"input\": \"input.txt\",\n            \"output\": \"output.txt\"\n        },\n        \"spj\": false,\n        \"spj_language\": null,\n        \"spj_code\": null,\n        \"spj_version\": null,\n        \"spj_compile_ok\": false,\n        \"rule_type\": \"ACM\",\n        \"visible\": true,\n        \"difficulty\": \"Low\",\n        \"source\": \"Sample Problem Set\",\n        \"total_score\": 0,\n        \"submission_number\": 0,\n        \"accepted_number\": 0,\n        \"statistic_info\": {},\n        \"share_submission\": true,\n        \"contest\": null\n    }\n}"
+				},
+				{
+					"name": "AddHipProblem",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-CSRFToken",
+								"value": "{{XCSRFToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \r\n    \"_id\": \"20\",\r\n    \"title\": \"Sample Rocm Problem\",\r\n    \"description\": \"<p>This is a sample problem.</p>\",\r\n    \"input_description\": \"<p>Given two integers A and B.</p>\",\r\n    \"output_description\": \"<p>Output the sum of A and B.</p>\",\r\n    \"time_limit\": 2000,\r\n    \"memory_limit\": 512,\r\n    \"difficulty\": \"Low\",\r\n    \"visible\": true,\r\n    \"share_submission\": true,\r\n    \"tags\": [\"math\", \"arithmetic\"],\r\n    \"languages\": [\"C\", \"C++\"],\r\n    \"template\": {\r\n    \"C\": \"//PREPEND BEGIN\\n#include <hip/hip_runtime.h>\\n#include <stdio.h>\\n//PREPEND END\\n\\n//TEMPLATE BEGIN\\n__global__ void addKernel(int *c, int a, int b) {\\n    *c = a + b;\\n}\\n\\nint add(int a, int b) {\\n    int *d_c, c;\\n    hipMalloc((void**)&d_c, sizeof(int));\\n    addKernel<<<1, 1>>>(d_c, a, b);\\n    hipMemcpy(&c, d_c, sizeof(int), hipMemcpyDeviceToHost);\\n    hipFree(d_c);\\n    return c;\\n}\\n//TEMPLATE END\\n\\n//APPEND BEGIN\\nint main() {\\n    int a, b;\\n    scanf(\\\"%d %d\\\", &a, &b);\\n    printf(\\\"%d\\\\n\\\", add(a, b));\\n    return 0;\\n}\\n//APPEND END\",\r\n    \r\n    \"C++\": \"//PREPEND BEGIN\\n#include <hip/hip_runtime.h>\\n#include <iostream>\\nusing namespace std;\\n//PREPEND END\\n\\n//TEMPLATE BEGIN\\n__global__ void addKernel(int *c, int a, int b) {\\n    *c = a + b;\\n}\\n\\nint add(int a, int b) {\\n    int *d_c, c;\\n    hipMalloc((void**)&d_c, sizeof(int));\\n    addKernel<<<1, 1>>>(d_c, a, b);\\n    hipMemcpy(&c, d_c, sizeof(int), hipMemcpyDeviceToHost);\\n    hipFree(d_c);\\n    return c;\\n}\\n//TEMPLATE END\\n\\n//APPEND BEGIN\\nint main() {\\n    int a, b;\\n    cin >> a >> b;\\n    cout << add(a, b) << endl;\\n    return 0;\\n}\\n//APPEND END\"\r\n}\r\n\r\n\r\n,\r\n    \"samples\": [\r\n        {\r\n            \"input\": \"3 5\",\r\n            \"output\": \"8\"\r\n        },\r\n        {\r\n            \"input\": \"10 20\",\r\n            \"output\": \"30\"\r\n        }\r\n    ],\r\n    \"spj\": false,\r\n    \"spj_language\": \"C++\",\r\n    \"spj_code\": \"\",\r\n    \"spj_compile_ok\": false,\r\n    \"test_case_id\": \"{{test_case_id}}\",\r\n    \"test_case_score\": {{infoArray}},\r\n    \"rule_type\": \"ACM\",\r\n    \"hint\": \"Use simple arithmetic operations.\",\r\n    \"source\": \"Sample Problem Set\",\r\n    \"io_mode\": {\r\n        \"io_mode\": \"Standard IO\",\r\n        \"input\": \"input.txt\",\r\n        \"output\": \"output.txt\"\r\n    }\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/problem",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"problem"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "Submission",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.sendRequest({\r",
+							"    url: pm.collectionVariables.get(\"baseUrl\") + \"/profile\",\r",
+							"    method: \"GET\",\r",
+							"    headers: {\r",
+							"        \"X-CSRFToken\": \"Fetch\"  \r",
+							"    }\r",
+							"}, function (err, res) {\r",
+							"    if (err) {\r",
+							"        console.log(\"Error fetching CSRF Token:\", err);\r",
+							"    } else {\r",
+							"        // 获取 Set-Cookie 头\r",
+							"        var cookieHeaders = res.headers.all(\"Set-Cookie\");\r",
+							"        \r",
+							"        if (cookieHeaders.length > 0) {\r",
+							"            let csrfToken = null;\r",
+							"\r",
+							"            // 遍历所有 Set-Cookie 头，查找 csrftoken\r",
+							"            cookieHeaders.forEach(function(cookie) {\r",
+							"                let match = cookie.value.match(/csrftoken=([^;]*)/);\r",
+							"                if (match) {\r",
+							"                    csrfToken = match[1];  // 提取 `csrftoken`\r",
+							"                }\r",
+							"            });\r",
+							"\r",
+							"            if (csrfToken) {\r",
+							"                pm.environment.set(\"XCSRFToken\", csrfToken); // 存储到环境变量\r",
+							"                console.log(\"CSRF Token stored:\", csrfToken);\r",
+							"            } else {\r",
+							"                console.log(\"CSRF Token not found in Set-Cookie headers.\");\r",
+							"            }\r",
+							"        } else {\r",
+							"            console.log(\"No Set-Cookie headers found.\");\r",
+							"        }\r",
+							"    }\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"var responseJson = pm.response.json();\r",
+							"\r",
+							"\r",
+							"if (responseJson.error === null && responseJson.data && responseJson.data.submission_id) {\r",
+							"    var submissionId = responseJson.data.submission_id;\r",
+							"    \r",
+							"\r",
+							"    pm.collectionVariables.set(\"submission_id\", submissionId);\r",
+							"    \r",
+							"\r",
+							"    console.log(\"Stored submission_id:\", submissionId);\r",
+							"} else {\r",
+							"    console.log(\"Error: submission_id not found in response.\");\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-csrfToken",
+						"value": "{{XCSRFToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"problem_id\": 7,\r\n  \"language\": \"C++\",\r\n  \"code\": \"__global__ void addKernel(int *c, int a, int b) {\\n    *c = a + b;\\n}\\n\\nint add(int a, int b) {\\n    int *d_c, c;\\n    hipMalloc((void**)&d_c, sizeof(int));\\n    addKernel<<<1, 1>>>(d_c, a, b);\\n    hipMemcpy(&c, d_c, sizeof(int), hipMemcpyDeviceToHost);\\n    hipFree(d_c);\\n    return c;\\n}\\n\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/submission",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"submission"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-csrfToken",
+								"value": "{{XCSRFToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"problem_id\": 4,\r\n  \"language\": \"C++\",\r\n  \"code\": \"int add(int a, int b) {\\n  return a + b;\\n}\\n\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/submission",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"submission"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 13 Feb 2025 04:47:19 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json;charset=UTF-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "102"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "Referrer-Policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "DENY"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "Vary",
+							"value": "Cookie"
+						},
+						{
+							"key": "Set-Cookie",
+							"value": "sessionid=c03we7knc0q0ojxmg57gwitsc81az6i5; expires=Thu, 27 Feb 2025 04:47:19 GMT; HttpOnly; Max-Age=1209600; Path=/; SameSite=Lax"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1; mode=block"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"error\": null,\n    \"data\": {\n        \"submission_id\": \"962cf442094da221d69bcb09be7ba6f9\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "getSubmission",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/submission?id={{submission_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"submission"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "{{submission_id}}"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "getSubmission",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/submission?id={{submission_id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"submission"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{submission_id}}"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 13 Feb 2025 04:49:05 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json;charset=UTF-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1050"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "Referrer-Policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "DENY"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "Vary",
+							"value": "Cookie"
+						},
+						{
+							"key": "Set-Cookie",
+							"value": "sessionid=c03we7knc0q0ojxmg57gwitsc81az6i5; expires=Thu, 27 Feb 2025 04:49:05 GMT; HttpOnly; Max-Age=1209600; Path=/; SameSite=Lax"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1; mode=block"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"error\": null,\n    \"data\": {\n        \"id\": \"962cf442094da221d69bcb09be7ba6f9\",\n        \"create_time\": \"2025-02-13T04:47:19.384884Z\",\n        \"user_id\": 1,\n        \"username\": \"root\",\n        \"code\": \"int add(int a, int b) {\\n  return a + b;\\n}\",\n        \"result\": 0,\n        \"info\": {\n            \"err\": null,\n            \"data\": [\n                {\n                    \"error\": 0,\n                    \"memory\": 3670016,\n                    \"output\": null,\n                    \"result\": 0,\n                    \"signal\": 0,\n                    \"cpu_time\": 0,\n                    \"exit_code\": 0,\n                    \"real_time\": 1,\n                    \"test_case\": \"1\",\n                    \"output_md5\": \"6512bd43d9caa6e02c990b0a82652dca\"\n                }\n            ]\n        },\n        \"language\": \"C++\",\n        \"shared\": false,\n        \"statistic_info\": {\n            \"time_cost\": 0,\n            \"memory_cost\": 3670016\n        },\n        \"ip\": \"172.18.0.1\",\n        \"contest\": null,\n        \"problem\": 4,\n        \"can_unshare\": true\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "JudgeServer",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Judge-Server-Token",
+						"value": "{{judgeServerToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"src\": \"__global__ void addKernel(int *c, int a, int b) {\\n    *c = a + b;\\n}\\n\\nint add(int a, int b) {\\n    int *d_c, c;\\n    hipMalloc((void**)&d_c, sizeof(int));\\n    addKernel<<<1, 1>>>(d_c, a, b);\\n    hipMemcpy(&c, d_c, sizeof(int), hipMemcpyDeviceToHost);\\n    hipFree(d_c);\\n    return c;\\n}\\n\",\r\n    \"language_config\": {\r\n    \"compile\": {\r\n        \"src_name\": \"main.cpp\",\r\n        \"exe_name\": \"main\",\r\n        \"max_cpu_time\": 3000,\r\n        \"max_real_time\": 5000,\r\n        \"max_memory\": 134217728,\r\n        \"compile_command\": \"/opt/rocm/bin/hipcc -O2 -std=c++17 {src_path} -o {exe_path}\"\r\n    },\r\n    \"run\": {\r\n        \"command\": \"{exe_path}\",\r\n        \"seccomp_rule\": \"general\",\r\n        \"env\": [\"HIP_VISIBLE_DEVICES=-1\",\"LANG=en_US.UTF-8\", \"LC_ALL=en_US.UTF-8\"]\r\n    }\r\n}\r\n,\r\n    \"max_cpu_time\": 1000,\r\n    \"max_memory\": 134217728,\r\n    \"test_case_id\": \"{{test_case_id}}\",\r\n    \"output\": true\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{JudgeServerUrl}}/judge",
+					"host": [
+						"{{JudgeServerUrl}}"
+					],
+					"path": [
+						"judge"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ping",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.sendRequest({\r",
+							"    url: pm.collectionVariables.get(\"baseUrl\") + \"/profile\",\r",
+							"    method: \"GET\",\r",
+							"    headers: {\r",
+							"        \"X-CSRFToken\": \"Fetch\"  \r",
+							"    }\r",
+							"}, function (err, res) {\r",
+							"    if (err) {\r",
+							"        console.log(\"Error fetching CSRF Token:\", err);\r",
+							"    } else {\r",
+							"        // 获取 Set-Cookie 头\r",
+							"        var cookieHeaders = res.headers.all(\"Set-Cookie\");\r",
+							"        \r",
+							"        if (cookieHeaders.length > 0) {\r",
+							"            let csrfToken = null;\r",
+							"\r",
+							"            // 遍历所有 Set-Cookie 头，查找 csrftoken\r",
+							"            cookieHeaders.forEach(function(cookie) {\r",
+							"                let match = cookie.value.match(/csrftoken=([^;]*)/);\r",
+							"                if (match) {\r",
+							"                    csrfToken = match[1];  // 提取 `csrftoken`\r",
+							"                }\r",
+							"            });\r",
+							"\r",
+							"            if (csrfToken) {\r",
+							"                pm.environment.set(\"XCSRFToken\", csrfToken); // 存储到环境变量\r",
+							"                console.log(\"CSRF Token stored:\", csrfToken);\r",
+							"            } else {\r",
+							"                console.log(\"CSRF Token not found in Set-Cookie headers.\");\r",
+							"            }\r",
+							"        } else {\r",
+							"            console.log(\"No Set-Cookie headers found.\");\r",
+							"        }\r",
+							"    }\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"packages": {},
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Judge-Server-Token",
+						"value": "{{judgeServerToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{JudgeServerUrl}}/ping",
+					"host": [
+						"{{JudgeServerUrl}}"
+					],
+					"path": [
+						"ping"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost/api"
+		},
+		{
+			"key": "test_case_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "infoArray",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "submission_id",
+			"value": ""
+		},
+		{
+			"key": "problem_id",
+			"value": ""
+		},
+		{
+			"key": "JudgeServerUrl",
+			"value": "http://localhost:12358",
+			"type": "string"
+		},
+		{
+			"key": "judgeServerToken",
+			"value": "a3bb21db11aef382bc361db1275b285dfc1d299e3e083b131052f630d4c13492",
+			"type": "string"
+		}
+	]
+}
