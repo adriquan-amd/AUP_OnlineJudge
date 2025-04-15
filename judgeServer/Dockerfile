@@ -113,7 +113,8 @@ useradd -u 903 -r -s /sbin/nologin -M -G code spj
 
 mkdir -p /usr/lib/judger
 EOS
-RUN usermod -aG video,render compiler && \
+RUN groupmod -g 993 render && \
+    usermod -aG video,render compiler && \
     usermod -aG video,render code && \
     usermod -aG video,render spj
 

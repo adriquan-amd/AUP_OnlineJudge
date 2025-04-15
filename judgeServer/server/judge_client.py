@@ -118,8 +118,7 @@ class JudgeClient(object):
             real_user_output_file = user_output_file = os.path.join(self._submission_dir, test_case_file_id + ".out")
             kwargs = {"input_path": in_file, "output_path": real_user_output_file, "error_path": real_user_output_file}
 
-        command = self._run_config["command"].format(exe_path=self._exe_path, exe_dir=os.path.dirname(self._exe_path),
-                                                     max_memory=int(self._max_memory / 1024))
+        command = self._run_config["command"].format(exe_path=self._exe_path, exe_dir=os.path.dirname(self._exe_path))
         command = shlex.split(command)
         env = ["PATH=" + os.environ.get("PATH", "")] + self._run_config.get("env", [])
 
@@ -136,9 +135,9 @@ class JudgeClient(object):
 
         run_result = _judger.run(max_cpu_time=self._max_cpu_time,
                                  max_real_time=self._max_real_time,
-                                 max_memory=self._max_memory,
+                                 max_memory=-1,
                                  max_stack=_judger.UNLIMITED,
-                                 max_output_size=max(test_case_info.get("output_size", 0) * 2, 1024 * 1024 * 16),
+                                 max_output_size=max(test_case_info.get("output_size", 0) * 2, 1024 * 1024 * 32),
                                  max_process_number=_judger.UNLIMITED,
                                  exe_path=command[0],
                                  args=command[1::],
@@ -147,7 +146,7 @@ class JudgeClient(object):
                                  seccomp_rule_name=seccomp_rule,
                                  uid=RUN_USER_UID,
                                  gid=RUN_GROUP_GID,
-                                 memory_limit_check_only=self._run_config.get("memory_limit_check_only", 0),
+
                                  **kwargs)
         run_result["test_case"] = test_case_file_id
 

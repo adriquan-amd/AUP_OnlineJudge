@@ -116,7 +116,7 @@ int main() {
         "no_memory_check": True,
         "command": "{exe_path}",
         "seccomp_rule": None,  
-        "env": ["HSA_OVERRIDE_GFX_VERSION=11.0.3"] + default_env  
+        "env": default_env  
     }
 }
 
